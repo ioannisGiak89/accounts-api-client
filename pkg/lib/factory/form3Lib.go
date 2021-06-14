@@ -21,6 +21,6 @@ func (f *Form3LibFactory) BuildAccountsService(cl client.AccountsApi) accounts.F
 	return accounts.New(cl)
 }
 
-func (f *Form3LibFactory) BuildForm3Client(baseUrl url.URL) client.AccountsApi {
+func (f *Form3LibFactory) BuildForm3Client(baseUrl *url.URL) client.AccountsApi {
 	return client.NewAccountsRestClient(baseUrl)
 }

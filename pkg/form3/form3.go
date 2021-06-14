@@ -10,7 +10,7 @@ type FormResources struct {
 	Accounts accounts.Form3Accounts
 }
 
-func New(bu url.URL) *FormResources {
+func New(bu *url.URL) *FormResources {
 	libFactory := factory.NewForm3Lib()
 	httpClient := libFactory.BuildForm3Client(bu)
 	accountsService := libFactory.BuildAccountsService(httpClient)

@@ -10,7 +10,7 @@ import (
 // Defines the Accounts interface
 type Form3Accounts interface {
 	Get(uuid uuid.UUID) (*model.AccountFetchResponse, error)
-	//Delete(uuid uuid.UUID) (*model.AccountFetchResponse, error)
+	Delete(accountID uuid.UUID, version int) error
 }
 
 // Form3AccountsService provides the Accounts API
@@ -26,7 +26,7 @@ func New(cl client.AccountsApi) *Form3AccountsService {
 
 func (f3a *Form3AccountsService) Get(accountID uuid.UUID) (*model.AccountFetchResponse, error) {
 
-	responseBody, err := f3a.Client.Get("v1/organisation/accounts/" + accountID.String())
+	responseBody, err := f3a.Client.Get(accountID)
 
 	if err != nil {
 		return nil, err
@@ -40,4 +40,9 @@ func (f3a *Form3AccountsService) Get(accountID uuid.UUID) (*model.AccountFetchRe
 	}
 
 	return &accountsResponse, nil
+}
+
+func (f3a *Form3AccountsService) Delete(accountID uuid.UUID, version int) error {
+	err := f3a.Client.Delete(accountID, version)
+	return err
 }
