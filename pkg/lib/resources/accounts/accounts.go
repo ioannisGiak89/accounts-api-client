@@ -9,8 +9,9 @@ import (
 
 // Defines the Accounts interface
 type Form3Accounts interface {
-	Get(uuid uuid.UUID) (*model.AccountFetchResponse, error)
+	Fetch(uuid uuid.UUID) (*model.AccountApiResponse, error)
 	Delete(accountID uuid.UUID, version int) error
+	Create(account *model.AccountCreateRequest) (*model.AccountApiResponse, error)
 }
 
 // Form3AccountsService provides the Accounts API
@@ -24,7 +25,7 @@ func New(cl client.AccountsApi) *Form3AccountsService {
 	}
 }
 
-func (f3a *Form3AccountsService) Get(accountID uuid.UUID) (*model.AccountFetchResponse, error) {
+func (f3a *Form3AccountsService) Fetch(accountID uuid.UUID) (*model.AccountApiResponse, error) {
 
 	responseBody, err := f3a.Client.Get(accountID)
 
@@ -32,7 +33,7 @@ func (f3a *Form3AccountsService) Get(accountID uuid.UUID) (*model.AccountFetchRe
 		return nil, err
 	}
 
-	var accountsResponse model.AccountFetchResponse
+	var accountsResponse model.AccountApiResponse
 	err = json.Unmarshal(responseBody, &accountsResponse)
 
 	if err != nil {
@@ -45,4 +46,28 @@ func (f3a *Form3AccountsService) Get(accountID uuid.UUID) (*model.AccountFetchRe
 func (f3a *Form3AccountsService) Delete(accountID uuid.UUID, version int) error {
 	err := f3a.Client.Delete(accountID, version)
 	return err
+}
+
+func (f3a *Form3AccountsService) Create(account *model.AccountCreateRequest) (*model.AccountApiResponse, error) {
+
+	jsonBody, err := json.Marshal(account)
+
+	if err != nil {
+		return nil, err
+	}
+
+	responseBody, err := f3a.Client.Post(jsonBody)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var accountsResponse model.AccountApiResponse
+	err = json.Unmarshal(responseBody, &accountsResponse)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &accountsResponse, nil
 }

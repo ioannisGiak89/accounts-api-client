@@ -4,9 +4,13 @@ import (
 	"github.com/google/uuid"
 )
 
-type AccountFetchResponse struct {
+type AccountApiResponse struct {
 	Data  Account
 	Links Links
+}
+
+type AccountCreateRequest struct {
+	Data Account
 }
 
 type Account struct {

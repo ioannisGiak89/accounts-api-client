@@ -3,6 +3,7 @@ package factory
 import (
 	"github.com/ioannisGiak89/accounts-api-client/pkg/lib/client"
 	"github.com/ioannisGiak89/accounts-api-client/pkg/lib/resources/accounts"
+	"net/http"
 	"net/url"
 )
 
@@ -22,5 +23,5 @@ func (f *Form3LibFactory) BuildAccountsService(cl client.AccountsApi) accounts.F
 }
 
 func (f *Form3LibFactory) BuildForm3Client(baseUrl *url.URL) client.AccountsApi {
-	return client.NewAccountsRestClient(baseUrl)
+	return client.NewAccountsRestClient(baseUrl, &http.Client{})
 }
