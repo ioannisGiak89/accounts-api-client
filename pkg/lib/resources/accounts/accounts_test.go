@@ -3,6 +3,7 @@ package accounts_test
 import (
 	"encoding/json"
 	"errors"
+	"github.com/google/uuid"
 	"github.com/ioannisGiak89/accounts-api-client/pkg/lib/resources/accounts"
 	"github.com/ioannisGiak89/accounts-api-client/testUtils"
 	"github.com/stretchr/testify/assert"
@@ -34,11 +35,11 @@ func (cl *mockedHttpClient) Get(path string) ([]byte, error) {
 func TestForm3AccountsService_Fetch(t *testing.T) {
 
 	baseURL, err := url.Parse("http://localhost:8080/")
-	accountID := testUtils.ParseUuid("9ea9bb7c-b5ec-4b00-bd82-af0067c4febb")
+	accountID := uuid.New()
 	require.NoError(t, err)
 
 	t.Run("should return an AccountApiResponse", func(t *testing.T) {
-		expectedResponse := testUtils.GetAccountApiResponse()
+		expectedResponse := testUtils.GetAccountApiResponse(accountID)
 		jsonResponse, err := json.Marshal(expectedResponse)
 		require.NoError(t, err)
 
@@ -87,7 +88,7 @@ func TestForm3AccountsService_Fetch(t *testing.T) {
 func TestForm3AccountsService_Delete(t *testing.T) {
 
 	baseURL, err := url.Parse("http://localhost:8080/")
-	accountID := testUtils.ParseUuid("9ea9bb7c-b5ec-4b00-bd82-af0067c4febb")
+	accountID := uuid.New()
 	require.NoError(t, err)
 
 	t.Run("should to a delete", func(t *testing.T) {
@@ -121,10 +122,11 @@ func TestForm3AccountsService_Create(t *testing.T) {
 
 	baseURL, err := url.Parse("http://localhost:8080/")
 	require.NoError(t, err)
-	accountToCreate := testUtils.GetAccountCreateRequest()
+	accountID := uuid.New()
+	accountToCreate := testUtils.GetAccountCreateRequest(accountID)
 
 	t.Run("should create an account and return an AccountApiResponse", func(t *testing.T) {
-		expectedResponse := testUtils.GetAccountApiResponse()
+		expectedResponse := testUtils.GetAccountApiResponse(accountID)
 		jsonResponse, err := json.Marshal(expectedResponse)
 		require.NoError(t, err)
 

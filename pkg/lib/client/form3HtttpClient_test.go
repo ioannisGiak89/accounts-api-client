@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"github.com/google/uuid"
 	"github.com/ioannisGiak89/accounts-api-client/pkg/lib/client"
 	"github.com/ioannisGiak89/accounts-api-client/testUtils"
 	"github.com/stretchr/testify/assert"
@@ -88,7 +89,7 @@ func TestHttpClient_Post(t *testing.T) {
 
 	baseURL, err := url.Parse("http://localhost:8080/")
 	require.NoError(t, err)
-	accountToCreate := testUtils.GetAccountCreateRequest()
+	accountToCreate := testUtils.GetAccountCreateRequest(uuid.New())
 	bodyRequest, err := json.Marshal(accountToCreate)
 	require.NoError(t, err)
 

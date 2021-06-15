@@ -7,11 +7,11 @@ import (
 )
 
 // Returns a Form3 Accounts API response
-func GetAccountApiResponse() *model.AccountApiResponse {
+func GetAccountApiResponse(id uuid.UUID) *model.AccountApiResponse {
 	return &model.AccountApiResponse{
 		Data: model.Account{
 			Attributes: model.AccountAttributes{
-				AlternativeNames: []string{"Test", "Alt", "Names"},
+				AlternativeNames: []string{"Some", "Alt", "Names"},
 				BankID:           "400300",
 				BankIDCode:       "GBDSC",
 				BaseCurrency:     "GBP",
@@ -19,7 +19,7 @@ func GetAccountApiResponse() *model.AccountApiResponse {
 				Country:          "GB",
 				Name:             []string{"Samantha Holder"},
 			},
-			ID:             ParseUuid("9ea9bb7c-b5ec-4b00-bd82-af0067c4febb"),
+			ID:             id,
 			OrganisationID: ParseUuid("eb0bd6f5-c3f5-44b2-b677-acd23cdde73c"),
 			Version:        0,
 			Type:           "accounts",
@@ -31,19 +31,19 @@ func GetAccountApiResponse() *model.AccountApiResponse {
 }
 
 // Returns a Form3 Accounts API create request
-func GetAccountCreateRequest() *model.AccountCreateRequest {
+func GetAccountCreateRequest(id uuid.UUID) *model.AccountCreateRequest {
 	return &model.AccountCreateRequest{
 		Data: model.Account{
 			Attributes: model.AccountAttributes{
-				AlternativeNames: nil,
+				AlternativeNames: []string{"Some", "Alt", "Names"},
 				BankID:           "400300",
 				BankIDCode:       "GBDSC",
 				BaseCurrency:     "GBP",
 				Bic:              "NWBKGB22",
 				Country:          "GB",
-				Name:             []string{"Samantha Holder2"},
+				Name:             []string{"Samantha Holder"},
 			},
-			ID:             ParseUuid("9ea9bb7c-b5ec-4b00-bd82-af0067c4febb"),
+			ID:             id,
 			OrganisationID: ParseUuid("eb0bd6f5-c3f5-44b2-b677-acd23cdde73c"),
 			Version:        0,
 			Type:           "accounts",
