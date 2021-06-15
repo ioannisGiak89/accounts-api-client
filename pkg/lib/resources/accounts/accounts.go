@@ -2,6 +2,7 @@ package accounts
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/google/uuid"
 	"github.com/ioannisGiak89/accounts-api-client/pkg/lib/client"
 	"github.com/ioannisGiak89/accounts-api-client/pkg/model"
@@ -14,20 +15,29 @@ type Form3Accounts interface {
 	Create(account *model.AccountCreateRequest) (*model.AccountApiResponse, error)
 }
 
-// Form3AccountsService provides the Accounts API
+// Form3AccountsService implements the Accounts interface. This service is meant to be the lib API
+// and handle any logic around Accounts
 type Form3AccountsService struct {
-	Client client.AccountsApi
+	Client           client.Form3ResourcesClient
+	accountsEndpoint string
 }
 
-func New(cl client.AccountsApi) *Form3AccountsService {
+// NewForm3AccountsService creates a Form3AccountsService
+func NewForm3AccountsService(cl client.Form3ResourcesClient, ae string) *Form3AccountsService {
 	return &Form3AccountsService{
-		Client: cl,
+		Client:           cl,
+		accountsEndpoint: ae,
 	}
 }
 
+// Fetch is used to retrieve Form3 Accounts
 func (f3a *Form3AccountsService) Fetch(accountID uuid.UUID) (*model.AccountApiResponse, error) {
-
-	responseBody, err := f3a.Client.Get(accountID)
+	path := fmt.Sprintf(
+		"%s%s",
+		f3a.accountsEndpoint,
+		accountID.String(),
+	)
+	responseBody, err := f3a.Client.Get(path)
 
 	if err != nil {
 		return nil, err
@@ -43,20 +53,28 @@ func (f3a *Form3AccountsService) Fetch(accountID uuid.UUID) (*model.AccountApiRe
 	return &accountsResponse, nil
 }
 
+// Delete is used to delete Form3 Accounts
 func (f3a *Form3AccountsService) Delete(accountID uuid.UUID, version int) error {
-	err := f3a.Client.Delete(accountID, version)
+	path := fmt.Sprintf(
+		"%s%s?version=%b",
+		f3a.accountsEndpoint,
+		accountID.String(),
+		version,
+	)
+	err := f3a.Client.Delete(path)
+
 	return err
 }
 
+// Create is used to create Form3 Accounts
 func (f3a *Form3AccountsService) Create(account *model.AccountCreateRequest) (*model.AccountApiResponse, error) {
-
 	jsonBody, err := json.Marshal(account)
 
 	if err != nil {
 		return nil, err
 	}
 
-	responseBody, err := f3a.Client.Post(jsonBody)
+	responseBody, err := f3a.Client.Post(f3a.accountsEndpoint, jsonBody)
 
 	if err != nil {
 		return nil, err

@@ -7,21 +7,26 @@ import (
 	"net/url"
 )
 
+// StandardFactory abstracts the creation of instances.
 type StandardFactory interface {
-	BuildAccountsService(client.AccountsApi) accounts.Form3AccountsService
-	BuildForm3Client(baseUrl url.URL) client.AccountsApi
+	BuildAccountsService(client.Form3ResourcesClient) accounts.Form3AccountsService
+	BuildForm3Client(baseUrl url.URL) client.Form3ResourcesClient
 }
 
+// Form3LibFactory builds instances
 type Form3LibFactory struct{}
 
-func NewForm3Lib() *Form3LibFactory {
+// NewForm3LibFactory creates a Form3LibFactory
+func NewForm3LibFactory() *Form3LibFactory {
 	return &Form3LibFactory{}
 }
 
-func (f *Form3LibFactory) BuildAccountsService(cl client.AccountsApi) accounts.Form3Accounts {
-	return accounts.New(cl)
+// BuildAccountsService builds a NewForm3AccountsService
+func (f *Form3LibFactory) BuildAccountsService(cl client.Form3ResourcesClient) accounts.Form3Accounts {
+	return accounts.NewForm3AccountsService(cl, "v1/organisation/accounts/")
 }
 
-func (f *Form3LibFactory) BuildForm3Client(baseUrl *url.URL) client.AccountsApi {
-	return client.NewAccountsRestClient(baseUrl, &http.Client{})
+// BuildForm3Client build a NewForm3RestClient
+func (f *Form3LibFactory) BuildForm3Client(baseUrl *url.URL) client.Form3ResourcesClient {
+	return client.NewForm3RestClient(baseUrl, &http.Client{})
 }

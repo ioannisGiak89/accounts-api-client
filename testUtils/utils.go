@@ -6,7 +6,7 @@ import (
 	"log"
 )
 
-// Returns a Fetch Account response
+// Returns a Form3 Accounts API response
 func GetAccountApiResponse() *model.AccountApiResponse {
 	return &model.AccountApiResponse{
 		Data: model.Account{
@@ -30,6 +30,7 @@ func GetAccountApiResponse() *model.AccountApiResponse {
 	}
 }
 
+// Returns a Form3 Accounts API create request
 func GetAccountCreateRequest() *model.AccountCreateRequest {
 	return &model.AccountCreateRequest{
 		Data: model.Account{
