@@ -1,6 +1,12 @@
 version: '3'
 
 services:
+  accountapi-client-lib:
+    build: .
+    depends_on:
+      - accountapi
+      - postgresql
+      - vault
   accountapi:
     image: form3tech/interview-accountapi:v1.0.0-39-gef7db03d
     restart: on-failure

@@ -10,8 +10,14 @@ import (
 )
 
 func TestFrom3_New(t *testing.T) {
+
+	// This has been set to accountapi as it makes requests to FAKE API
+	// It will work fine if you want to run the tests within the container
+	// To run them from your host change baseUrl to "http://localhost:8080/"
+	baseUrl := "http://accountapi:8080/"
+
 	t.Run("should do all three basic operations", func(t *testing.T) {
-		baseURL, err := url.Parse("http://localhost:8080/")
+		baseURL, err := url.Parse(baseUrl)
 		require.NoError(t, err)
 
 		accountID := uuid.New()
