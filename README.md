@@ -1,57 +1,118 @@
-# Form3 Take Home Exercise
 
-Engineers at Form3 build highly available distributed systems in a microservices environment. Our take home test is designed to evaluate real world activities that are involved with this role. We recognise that this may not be as mentally challenging and may take longer to implement than some algorithmic tests that are often seen in interview exercises. Our approach however helps ensure that you will be working with a team of engineers with the necessary practical skills for the role (as well as a diverse range of technical wizardry). 
+# Account API Client Library
 
-## Instructions
-The goal of this exercise is to write a client library in Go to access our fake account API, which is provided as a Docker
-container in the file `docker-compose.yaml` of this repository. Please refer to the
-[Form3 documentation](http://api-docs.form3.tech/api.html#organisation-accounts) for information on how to interact with the API. Please note that the fake account API does not require any authorisation or authentication.
+A client library in Go to access Form3's fake API
 
-If you encounter any problems running the fake account API we would encourage you to do some debugging first,
-before reaching out for help.
 
-## Submission Guidance
 
-### Shoulds
+## Usage/Examples
 
-The finished solution **should:**
-- Be written in Go.
-- Be a client library suitable for use in another software project.
-- Implement the `Create`, `Fetch`, and `Delete` operations on the `accounts` resource.
-- Be well tested to the level you would expect in a commercial environment.
-- Contain documentation of your technical decisions.
-- Be simple and concise.
-- Have tests that run from `docker-compose up` - our reviewers will run `docker-compose up` to assess if your tests pass.
+```go
+baseURL, err := url.Parse("http://localhost:8080/")
 
-### Should Nots
+if err != nil {
+    log.Fatal(err)
+}
 
-The finished solution **should not:**
-- Use a code generator to write the client library.
-- Use (copy or otherwise) code from any third party without attribution to complete the exercise, as this will result in the test being rejected.
-- Use a library for your client (e.g: go-resty). Libraries to support testing or types like UUID are fine.
-- Implement client-side validation.
-- Implement an authentication scheme.
-- Implement support for the fields `data.attributes.private_identification`, `data.attributes.organisation_identification`
-  and `data.relationships`, as they are omitted in the provided fake account API implementation.
-- Have advanced features, however discussion of anything extra you'd expect a production client to contain would be useful in the documentation.
-- Be a command line client or other type of program - the requirement is to write a client library.
-- Implement the `List` operation.
-> We give no credit for including any of the above in a submitted test, so please only focus on the "Shoulds" above.
+f3 := form3.New(baseURL)
+accountID := uuid.New()
 
-## How to submit your exercise
+accountToCreate := &model.AccountCreateRequest{
+    Data: model.Account{
+        Attributes:     model.AccountAttributes{
+            AlternativeNames: nil,
+            BankID:           "400300",
+            BankIDCode:       "GBDSC",
+            BaseCurrency:     "GBP",
+            Bic:              "NWBKGB22",
+            Country:          "GB",
+            Name:             []string{"Samantha Holder2"},
+        },
+        ID:             accountID,
+        OrganisationID: uuid.New(),
+        Version:        0,
+        Type:           "accounts",
+    },
+}
 
-- Include your name in the README. If you are new to Go, please also mention this in the README so that we can consider this when reviewing your exercise
-- Create a private [GitHub](https://help.github.com/en/articles/create-a-repo) repository, copy the `docker-compose` from this repository
-- [Invite](https://help.github.com/en/articles/inviting-collaborators-to-a-personal-repository) @form3tech-interviewer-1 to your private repo
-- Let us know you've completed the exercise using the link provided at the bottom of the email from our recruitment team
+accountApiResponse, err := f3.Accounts.Create(accountToCreate)
 
-## License
+if err != nil {
+    log.Fatal(err)
+}
 
-Copyright 2019-2021 Form3 Financial Cloud
+account, err := f3.Accounts.Fetch(accountID)
 
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+if err != nil {
+    log.Fatal(err)
+}
 
-http://www.apache.org/licenses/LICENSE-2.0
+err = f3.Accounts.Delete(accountID, 0)
 
-Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+if err != nil {
+    log.Fatal(err)
+}
+```
+
+  
+## API Reference
+
+### Accounts
+
+#### Fetch(accountID uuid.UUID) (*model.AccountApiResponse, error)
+
+Takes an account ID and returns the Form3's API fetch response or an error.
+
+#### Delete(accountID uuid.UUID) error
+
+Takes an account ID and deletes an account. Returns an error if something foes wrong.
+
+#### Create(account *model.AccountCreateRequest) (*model.AccountApiResponse, error)
+
+Takes an AccountCreateRequest and creates an account. Returns the Form3's API response or an error.
+
+
+  
+## Run Locally
+
+Clone the project
+
+```bash
+  git clone git@github.com:ioannisGiak89/accounts-api-client.git
+```
+
+Go to the project directory
+
+```bash
+  cd accounts-api-client
+```
+
+Spin up docker containers
+
+**Note** This will also run the tests on the start up. Integration tests are making calls to the fake API. To run the tests outside the container please see the [Running Tests](#Running-Tests) section bellow
+
+```bash
+  docker-compose up
+```
+
+
+  
+## Running Tests
+
+To run tests, run the following command
+
+```bash
+  go test ./...
+```
+
+This will run both unit and integration tests. 
+
+By default, integrations tests have been configured to run from within the lib container and make calls to the fake API.
+
+To run the tests from your host machine, change the var baseUrl to http://localhost:8080/ in form3Integration_test.go file.
+## Future Improvments
+
+* Suport configuration as an object.
+* Suport configuration as env variables.
+* Cache API responses to avoid multiple calls to the API within sort period of time.
+* Add support for other resources rather than accounts.

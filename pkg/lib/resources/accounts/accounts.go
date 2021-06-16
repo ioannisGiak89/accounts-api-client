@@ -10,7 +10,7 @@ import (
 
 // Defines the Accounts interface
 type Form3Accounts interface {
-	Fetch(uuid uuid.UUID) (*model.AccountApiResponse, error)
+	Fetch(accountID uuid.UUID) (*model.AccountApiResponse, error)
 	Delete(accountID uuid.UUID, version int) error
 	Create(account *model.AccountCreateRequest) (*model.AccountApiResponse, error)
 }
