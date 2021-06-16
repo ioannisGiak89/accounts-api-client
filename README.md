@@ -59,15 +59,15 @@ if err != nil {
 
 ### Accounts
 
-#### Fetch(accountID uuid.UUID) (*model.AccountApiResponse, error)
+#### `Fetch(accountID uuid.UUID) (*model.AccountApiResponse, error)`
 
 Takes an account ID and returns the Form3's API fetch response or an error.
 
-#### Delete(accountID uuid.UUID) error
+#### `Delete(accountID uuid.UUID) error`
 
 Takes an account ID and deletes an account. Returns an error if something foes wrong.
 
-#### Create(account *model.AccountCreateRequest) (*model.AccountApiResponse, error)
+#### `Create(account *model.AccountCreateRequest) (*model.AccountApiResponse, error)`
 
 Takes an AccountCreateRequest and creates an account. Returns the Form3's API response or an error.
 
