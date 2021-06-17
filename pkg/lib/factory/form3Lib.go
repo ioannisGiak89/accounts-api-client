@@ -9,7 +9,7 @@ import (
 
 // StandardFactory abstracts the creation of instances.
 type StandardFactory interface {
-	BuildAccountsService(client.Form3ResourcesClient) accounts.Form3AccountsService
+	BuildAccountsService(client.Form3ResourcesClient) accounts.Form3Accounts
 	BuildForm3Client(baseUrl url.URL) client.Form3ResourcesClient
 }
 

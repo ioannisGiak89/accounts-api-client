@@ -1,8 +1,18 @@
-
 # Account API Client Library
 
 A client library in Go to access Form3's fake API
 
+Author: Ioannis Giakoumidis
+
+Hello, 
+
+Thank you very much for taking the time to review my assessment. 
+
+I just wanted to let you know that I do not have a lot of experience with Go. I have previously completed a couple of experimental projects outside work,
+and I have contributed to some internal dev tools that my former company had developed.
+
+Many Thanks,
+Ioannis 
 
 
 ## Usage/Examples
@@ -109,7 +119,7 @@ This will run both unit and integration tests.
 
 By default, integrations tests have been configured to run from within the lib container and make calls to the fake API.
 
-To run the tests from your host machine, change the var baseUrl to http://localhost:8080/ in form3Integration_test.go file.
+To run the tests from your host machine, change the var baseUrl to `http://localhost:8080/` in [form3Integration_test.go](https://github.com/ioannisGiak89/accounts-api-client/blob/main/pkg/form3/form3Integration_test.go#L17) file.
 ## Future Improvments
 
 * Suport configuration as an object.

@@ -2,11 +2,13 @@ version: '3'
 
 services:
   accountapi-client-lib:
-    build: .
+    build: docker
     depends_on:
       - accountapi
       - postgresql
       - vault
+    volumes:
+      - ./:/go/src/github.com/ioannisGiak89/account-api-client
   accountapi:
     image: form3tech/interview-accountapi:v1.0.0-39-gef7db03d
     restart: on-failure

@@ -18,14 +18,14 @@ type Form3Accounts interface {
 // Form3AccountsService implements the Accounts interface. This service is meant to be the lib API
 // and handle any logic around Accounts
 type Form3AccountsService struct {
-	Client           client.Form3ResourcesClient
+	client           client.Form3ResourcesClient
 	accountsEndpoint string
 }
 
 // NewForm3AccountsService creates a Form3AccountsService
 func NewForm3AccountsService(cl client.Form3ResourcesClient, ae string) *Form3AccountsService {
 	return &Form3AccountsService{
-		Client:           cl,
+		client:           cl,
 		accountsEndpoint: ae,
 	}
 }
@@ -37,7 +37,7 @@ func (f3a *Form3AccountsService) Fetch(accountID uuid.UUID) (*model.AccountApiRe
 		f3a.accountsEndpoint,
 		accountID.String(),
 	)
-	responseBody, err := f3a.Client.Get(path)
+	responseBody, err := f3a.client.Get(path)
 
 	if err != nil {
 		return nil, err
@@ -61,7 +61,7 @@ func (f3a *Form3AccountsService) Delete(accountID uuid.UUID, version int) error 
 		accountID.String(),
 		version,
 	)
-	err := f3a.Client.Delete(path)
+	err := f3a.client.Delete(path)
 
 	return err
 }
@@ -74,7 +74,7 @@ func (f3a *Form3AccountsService) Create(account *model.AccountCreateRequest) (*m
 		return nil, err
 	}
 
-	responseBody, err := f3a.Client.Post(f3a.accountsEndpoint, jsonBody)
+	responseBody, err := f3a.client.Post(f3a.accountsEndpoint, jsonBody)
 
 	if err != nil {
 		return nil, err
